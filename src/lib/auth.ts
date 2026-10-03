@@ -17,6 +17,7 @@ import { createRemoteJWKSet, jwtVerify, SignJWT, type JWTPayload } from "jose";
 import { cookies, headers } from "next/headers";
 import { getDb } from "@/db";
 import { roles, users } from "@/db/schema";
+import { envVar } from "./env";
 import { scopeAlive } from "./tenant";
 
 export const SESSION_COOKIE = "gs_session";
@@ -40,7 +41,7 @@ export interface CurrentUser {
 
 let warnedSecret = false;
 function authSecret(): Uint8Array {
-  const s = process.env.AUTH_SECRET;
+  const s = envVar("AUTH_SECRET");
   if (!s) {
     if (!warnedSecret) {
       warnedSecret = true;
@@ -92,7 +93,7 @@ async function verifyLocalSession(token: string): Promise<Session | null> {
 let jwks: ReturnType<typeof createRemoteJWKSet> | null = null;
 
 async function verifyNeonSession(token: string): Promise<Session | null> {
-  const jwksUrl = process.env.NEON_AUTH_JWKS_URL;
+  const jwksUrl = envVar("NEON_AUTH_JWKS_URL");
   if (!jwksUrl) return null;
   try {
     jwks ??= createRemoteJWKSet(new URL(jwksUrl));
@@ -116,7 +117,7 @@ async function verifyNeonSession(token: string): Promise<Session | null> {
 }
 
 export function isNeonAuthEnabled(): boolean {
-  return Boolean(process.env.NEON_AUTH_JWKS_URL);
+  return Boolean(envVar("NEON_AUTH_JWKS_URL"));
 }
 
 // --- Request helpers -------------------------------------------------------------

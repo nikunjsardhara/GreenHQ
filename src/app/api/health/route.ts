@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSql } from "@/db";
+import { envVar } from "@/lib/env";
 import { api } from "@/lib/http";
 
 export const dynamic = "force-dynamic";
@@ -29,9 +30,9 @@ export const GET = api(async () => {
     db,
     dbError,
     env: {
-      databaseUrl: Boolean(process.env.DATABASE_URL),
-      authSecret: Boolean(process.env.AUTH_SECRET),
-      appUrl: process.env.NEXT_PUBLIC_APP_URL ?? null,
+      databaseUrl: Boolean(envVar("DATABASE_URL")),
+      authSecret: Boolean(envVar("AUTH_SECRET")),
+      appUrl: envVar("NEXT_PUBLIC_APP_URL") ?? null,
       nodeEnv: process.env.NODE_ENV ?? null,
     },
   });

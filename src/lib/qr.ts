@@ -2,6 +2,7 @@
 // QR payload: https://<domain>/t/<nanoid>
 import { customAlphabet } from "nanoid";
 import QRCode from "qrcode";
+import { envVar } from "./env";
 
 // Ambiguous characters (0/O, 1/I/l) removed, the short-code is printed
 // under each QR on the batch sheet for manual reference.
@@ -15,7 +16,7 @@ export function newPublicId(): string {
 }
 
 export function appUrl(): string {
-  return (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000").replace(/\/$/, "");
+  return (envVar("NEXT_PUBLIC_APP_URL") ?? "http://localhost:3000").replace(/\/$/, "");
 }
 
 export function saplingUrl(nanoid: string): string {

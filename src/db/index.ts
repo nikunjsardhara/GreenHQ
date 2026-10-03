@@ -7,13 +7,14 @@
 // verification is separate (JWKS, see src/lib/auth.ts).
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
+import { envVar } from "@/lib/env";
 import * as schema from "./schema";
 
 let client: ReturnType<typeof postgres> | null = null;
 let dbInstance: ReturnType<typeof drizzle<typeof schema>> | null = null;
 
 function connectionString(): string {
-  const url = process.env.DATABASE_URL;
+  const url = envVar("DATABASE_URL");
   if (!url) {
     throw new Error(
       "DATABASE_URL is not set. Copy .env.example to .env and run `bun run setup`.",
