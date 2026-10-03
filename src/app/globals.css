@@ -1,0 +1,309 @@
+@import "tailwindcss";
+@import "@knadh/oat/oat.min.css";
+
+/* GreenHQ theme, PRD §2: light mode only, token-based CSS variables so
+   dark mode later is a config change, not a rewrite. Oat is imported after
+   Tailwind so its semantic-element defaults win for unclassed markup. */
+:root {
+  --gs-brand: #2e7d32;
+  --gs-brand-ink: #1b5e20;
+  --gs-accent: #f9a825;
+  --gs-bg: #f5f0ea;
+  --gs-card: #ffffff;
+  --gs-ink: #1a1a1a;
+  --gs-muted: #6b6b6b;
+  --gs-line: #e8e4de;
+  --gs-coral: #f4a261;
+  --gs-coral-light: #fdf0e6;
+  --gs-mint: #b8d8d0;
+  --gs-mint-light: #f0f7f5;
+  --gs-yellow: #f4d03f;
+  --gs-yellow-light: #fdf8e6;
+  --gs-lavender: #d4d0f0;
+  --gs-lavender-light: #f5f3fa;
+  color-scheme: light;
+
+  /* Lock Oat to the same light theme (PRD §2: light mode only). Oat ships
+     `color-scheme: light dark` with light-dark() tokens, which flips its
+     text/controls to near-white on dark-mode OSes while our surfaces stay
+     light, unreadable. These overrides come after the Oat import, so they
+     win, and map Oat's semantic tokens onto our measured palette (WCAG AA or
+     better everywhere): body ink on bg 13.9:1, muted small text on card
+     8.1:1, white on brand 5.1:1, links in brand-ink 7.9:1. */
+  --background: var(--gs-bg);
+  --foreground: var(--gs-ink);
+  --card: var(--gs-card);
+  --card-foreground: var(--gs-ink);
+  --primary: var(--gs-brand);
+  --primary-foreground: #ffffff;
+  --secondary: #e8efe7;
+  --secondary-foreground: var(--gs-ink);
+  --muted: #e8efe7;
+  --muted-foreground: var(--gs-muted);
+  --faint: var(--gs-bg);
+  --faint-foreground: var(--gs-muted);
+  --accent: #fff8e1;
+  --border: var(--gs-line);
+  --input: #b9c7b8;
+  --ring: var(--gs-brand);
+  --danger: #b3261e;
+  --danger-foreground: #ffffff;
+  --success: var(--gs-brand-ink);
+  --success-foreground: #ffffff;
+  --warning: #7a5200;
+  --warning-foreground: #ffffff;
+}
+
+@theme inline {
+  --color-brand: var(--gs-brand);
+  --color-brand-ink: var(--gs-brand-ink);
+  --color-accent: var(--gs-accent);
+  --color-surface: var(--gs-card);
+  --color-ink: var(--gs-ink);
+  --color-muted: var(--gs-muted);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--gs-bg);
+  color: var(--gs-ink);
+}
+
+/* Bento cards in the reference-app language (PRD §8). */
+.gs-card {
+  background: var(--gs-card);
+  border: none;
+  border-radius: 1.5rem;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.04);
+}
+
+.gs-chip {
+  border-radius: 999px;
+  border: none;
+  background: var(--gs-card);
+  /* Explicit ink text: Oat styles bare <button> with white text (meant for
+     its green primary buttons), which would be invisible on our white chips. */
+  color: var(--gs-ink);
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 1px 4px rgb(0 0 0 / 0.06);
+}
+
+.gs-chip[aria-pressed="true"] {
+  background: var(--gs-ink);
+  color: #fff;
+  border-color: var(--gs-ink);
+}
+
+/* Floating overlays (toasts, dialogs, bulk panel): deep layered shadow so
+   they lift clearly off the content behind them. Pair with .gs-card. */
+.gs-float {
+  box-shadow: 0 16px 48px rgb(0 0 0 / 0.22), 0 4px 12px rgb(0 0 0 / 0.10);
+  border: 1px solid var(--gs-line);
+}
+
+/* Global pending indicator: slim indeterminate bar pinned to viewport top,
+   visible during every tracked API round-trip. Non-blocking. */
+.gs-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 70;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.gs-progress > span {
+  display: block;
+  height: 100%;
+  width: 30%;
+  border-radius: 999px;
+  background: var(--gs-brand);
+  animation: gs-progress-slide 1s ease-in-out infinite;
+}
+
+@keyframes gs-progress-slide {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+/* Mobile-app navigation links, drill-down rows and inline links with a
+   chevron affordance (lucide), semibold brand-ink at 7.9:1 on white, 44px
+   touch targets, visible focus ring and tap highlight. Pills remain for
+   buttons, toggles and CTAs. */
+.gs-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--gs-coral);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  padding: 0.65rem 0.25rem;
+  border-radius: 0.625rem;
+  min-height: 44px;
+}
+
+.gs-action-link:hover {
+  color: var(--gs-ink);
+}
+
+.gs-action-link:active {
+  background: var(--gs-coral-light);
+}
+
+.gs-action-link:focus-visible {
+  outline: 3px solid var(--gs-coral);
+  outline-offset: 2px;
+}
+
+.gs-action-link svg {
+  flex-shrink: 0;
+}
+
+/* Full-width menu rows (profile sections, settings-style menus). */
+.gs-menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  color: var(--gs-ink);
+  font-weight: 500;
+  font-size: 0.95rem;
+  text-decoration: none;
+  padding: 0.9rem 0.25rem;
+  min-height: 48px;
+  border-radius: 0.75rem;
+  transition: background 0.2s ease;
+}
+
+.gs-menu-link:active {
+  background: var(--gs-bg);
+}
+
+.gs-menu-link:focus-visible {
+  outline: 3px solid var(--gs-coral);
+  outline-offset: -1px;
+}
+
+.gs-menu-link svg {
+  color: var(--gs-muted);
+  flex-shrink: 0;
+}
+
+/* Floating pill bottom nav (PRD §8). */
+.gs-bottomnav {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 1000;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  background: #ffffff;
+  backdrop-filter: blur(12px);
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 16px 48px rgb(0 0 0 / 0.22), 0 8px 24px rgb(0 0 0 / 0.14), 0 2px 8px rgb(0 0 0 / 0.10);
+}
+
+.leaflet-container {
+  z-index: 0 !important;
+}
+
+.gs-bottomnav a,
+.gs-bottomnav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  color: #999;
+  font-size: 0.65rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 999px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+}
+
+@media (max-width: 380px) {
+  .gs-bottomnav a,
+  .gs-bottomnav button {
+    padding: 0.5rem 0.6rem;
+    font-size: 0.6rem;
+  }
+  .gs-bottomnav {
+    gap: 0.25rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
+
+.gs-bottomnav a[aria-current="page"] {
+  background: var(--gs-ink);
+  color: #fff;
+}
+
+.gs-bottomnav a.scan,
+.gs-bottomnav button.scan {
+  background: var(--gs-coral);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* QR sheet print layout (PRD §5.4 output). */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  .qr-sheet {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+  .qr-cell {
+    break-inside: avoid;
+    border: 1px solid #999;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    text-align: center;
+  }
+}
+ul {
+    list-style-type: none;
+}
+
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* Toast entrance: soft drop-and-settle. */
+@keyframes gs-toast-in {
+  from { opacity: 0; transform: translateY(-12px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.gs-toast { animation: gs-toast-in 0.22s ease-out; }
+
+@media (min-width: 640px) {
+  [aria-label="Open menu"], [aria-label="Close menu"] {
+    display: none !important;
+  }
+}
