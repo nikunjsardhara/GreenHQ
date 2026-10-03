@@ -7,6 +7,7 @@ import {
   Download,
   Gift,
   Leaf,
+  LocateFixed,
   MapPin,
   QrCode,
   ShieldCheck,
@@ -54,18 +55,33 @@ const FEATURES = [
 const STEPS = [
   {
     n: "01",
-    title: "Print a batch of QRs",
-    body: "Create a project, pick the species mix, and generate hundreds of QR codes in one transaction.",
+    title: "Create a plantation project",
+    body: "Give your drive a name, draw its zone on the map, and set a sapling target. Everything else lives inside the project.",
   },
   {
     n: "02",
-    title: "Scan & plant in the field",
-    body: "Volunteers scan each code, capture GPS and a photo. The sapling moves from Registered to Planted.",
+    title: "Add saplings in bulk",
+    body: "Pick the species mix and quantity. Hundreds of sapling records are created in a single transaction.",
   },
   {
     n: "03",
-    title: "Track, gift & prove",
-    body: "Log growth stages, gift trees with certificates, and export survival and CO₂ reports for donors.",
+    title: "Print the QR codes",
+    body: "Download the QR sheet with a short-code under each code. Print them, tag each sapling, and head to the field.",
+  },
+  {
+    n: "04",
+    title: "Plant and activate",
+    body: "Scan each code where you plant it to capture GPS, date, and a photo. The sapling moves from Registered to Planted.",
+  },
+  {
+    n: "05",
+    title: "Track growth and share",
+    body: "Update statuses as trees grow (Growing, Mature) and add photos. Anyone scanning the QR sees the public tree page.",
+  },
+  {
+    n: "06",
+    title: "Gift a tree",
+    body: "Dedicate an ungifted tree to someone with a certificate and QR link. Each tree can be gifted only once, at Rs 500 per gift.",
   },
 ];
 
@@ -105,6 +121,24 @@ const METHOD = [
   },
 ];
 
+const INSTALL_STEPS = [
+  {
+    n: "01",
+    title: "Open this site in Chrome",
+    body: "Visit your GreenHQ address on your phone. No app store or download needed.",
+  },
+  {
+    n: "02",
+    title: "Tap the menu",
+    body: "Tap the three-dot menu in the top-right corner of Chrome.",
+  },
+  {
+    n: "03",
+    title: "Add to Home screen",
+    body: "Tap Add to Home screen (or Install app), then Install. GreenHQ now opens full-screen from your home screen.",
+  },
+];
+
 const FAQS = [
   {
     q: "Do phones need internet in the field?",
@@ -125,6 +159,14 @@ const FAQS = [
   {
     q: "Can donors see progress?",
     a: "Yes. Every tree has a public, shareable page with photos, map and timeline. No login needed to view.",
+  },
+  {
+    q: "How does tree gifting work?",
+    a: "Pick any tree that has not been gifted yet and dedicate it with a recipient name and message. Each tree can be gifted only once, and gifting costs Rs 500 per tree. The recipient gets a certificate with a QR link and can watch the tree grow.",
+  },
+  {
+    q: "How do I install the app on my phone?",
+    a: "GreenHQ is a PWA, so there is nothing to download from an app store. On Android, open the site in Chrome, tap the three-dot menu, then Add to Home screen (or Install app). On iPhone, open it in Safari and use Share, then Add to Home Screen.",
   },
   {
     q: "Which languages are supported?",
@@ -207,6 +249,55 @@ export function Landing() {
               <MapPin size={12} /> 22.71960, 75.85770 · 3 growth photos
             </div>
           </div>
+          {/* Geo-tagging illustration: stylized project map with live tree pins */}
+          <div className="gs-card gs-float overflow-hidden -rotate-1 mt-4">
+            <div className="relative h-52">
+              <svg viewBox="0 0 400 240" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 h-full w-full" aria-hidden>
+                <defs>
+                  <pattern id="hero-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M40 0H0V40" fill="none" stroke="#dde5da" strokeWidth="1" />
+                  </pattern>
+                </defs>
+                <rect width="400" height="240" fill="#edf2ea" />
+                <rect width="400" height="240" fill="url(#hero-grid)" />
+                <polygon points="40,28 190,18 205,140 30,152" fill="#2e7d320d" stroke="#2e7d32" strokeWidth="2" strokeDasharray="7 6" strokeLinejoin="round" />
+                <ellipse cx="115" cy="85" rx="80" ry="52" fill="#d7e8cf" stroke="#bcd6b2" strokeWidth="2" />
+                <ellipse cx="332" cy="200" rx="58" ry="30" fill="#cfe3f2" />
+                <path d="M-10 178 C 80 158, 140 198, 220 178 S 360 138, 420 158" fill="none" stroke="#d5dcd2" strokeWidth="18" strokeLinecap="round" />
+                <path d="M-10 178 C 80 158, 140 198, 220 178 S 360 138, 420 158" fill="none" stroke="#ffffff" strokeWidth="13" strokeLinecap="round" />
+                <path d="M252 -10 C 242 60, 272 120, 262 196 S 252 250, 257 280" fill="none" stroke="#d5dcd2" strokeWidth="16" />
+                <path d="M252 -10 C 242 60, 272 120, 262 196 S 252 250, 257 280" fill="none" stroke="#ffffff" strokeWidth="11" />
+              </svg>
+              <span className="absolute rounded-full border-2 border-[var(--gs-brand)] bg-[var(--gs-brand)] opacity-15" style={{ left: "38%", top: "48%", width: 72, height: 72, transform: "translate(-50%, -50%)" }} />
+              <span className="absolute" style={{ left: "20%", top: "24%" }}>
+                <span className="block w-7 h-7 rounded-full bg-white text-[var(--gs-brand)] flex items-center justify-center shadow-md ring-1 ring-[var(--gs-line)]">
+                  <MapPin size={15} />
+                </span>
+              </span>
+              <span className="absolute" style={{ left: "62%", top: "18%" }}>
+                <span className="block w-7 h-7 rounded-full bg-white text-[var(--gs-brand)] flex items-center justify-center shadow-md ring-1 ring-[var(--gs-line)]">
+                  <MapPin size={15} />
+                </span>
+              </span>
+              <span className="absolute" style={{ left: "38%", top: "48%", transform: "translate(-50%, -50%)" }}>
+                <span className="absolute -inset-2.5 rounded-full bg-[var(--gs-brand)] opacity-25 animate-ping" />
+                <span className="relative block w-9 h-9 rounded-full bg-[var(--gs-brand)] text-white flex items-center justify-center shadow-lg">
+                  <MapPin size={18} />
+                </span>
+              </span>
+              <span className="absolute" style={{ left: "76%", top: "62%" }}>
+                <span className="block w-7 h-7 rounded-full bg-white text-[var(--gs-brand)] flex items-center justify-center shadow-md ring-1 ring-[var(--gs-line)]">
+                  <MapPin size={15} />
+                </span>
+              </span>
+              <span className="absolute top-2.5 right-2.5 inline-flex items-center gap-1 rounded-full bg-white text-[0.7rem] font-semibold px-2.5 py-1 shadow-md ring-1 ring-[var(--gs-line)] text-[var(--gs-ink)]">
+                <Sprout size={12} aria-hidden /> 128 trees nearby
+              </span>
+              <span className="absolute bottom-2.5 left-2.5 inline-flex items-center gap-1 rounded-full bg-[var(--gs-ink)] text-white text-[0.7rem] font-semibold px-2.5 py-1 shadow-md">
+                <LocateFixed size={12} aria-hidden /> ±4 m · GPS locked
+              </span>
+            </div>
+          </div>
           <div className="gs-card gs-float px-4 py-3 absolute -left-3 sm:-left-8 -bottom-6 -rotate-2 flex items-center gap-2.5">
             <span className="w-9 h-9 rounded-xl bg-[var(--gs-coral-light)] flex items-center justify-center text-[var(--gs-coral)]">
               <Gift size={18} />
@@ -253,11 +344,11 @@ export function Landing() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section id="how" aria-label="How it works" className="mx-auto max-w-5xl px-5 mt-14 sm:mt-20 scroll-mt-24">
-        <p className="text-[0.7rem] tracking-[0.22em] uppercase text-[var(--gs-brand)] font-bold">How it works</p>
+      {/* How to use */}
+      <section id="how" aria-label="How to use" className="mx-auto max-w-5xl px-5 mt-14 sm:mt-20 scroll-mt-24">
+        <p className="text-[0.7rem] tracking-[0.22em] uppercase text-[var(--gs-brand)] font-bold">How to use</p>
         <h2 className="text-3xl sm:text-4xl font-bold tracking-tight text-[var(--gs-ink)] mt-2 text-balance">
-          From QR sheet to living forest in three steps.
+          From project to living forest in six steps.
         </h2>
         <ol className="grid gap-4 md:grid-cols-3 mt-7 list-none pl-0">
           {STEPS.map((s) => (
@@ -332,6 +423,39 @@ export function Landing() {
           >
             <Gift size={16} aria-hidden /> Gift a tree
           </Link>
+        </div>
+      </section>
+
+      {/* Install the app */}
+      <section aria-label="Install the app" className="mx-auto max-w-5xl px-5 mt-14 sm:mt-20">
+        <div className="gs-card p-8 sm:p-10">
+          <div className="flex items-center gap-4">
+            <span className="w-14 h-14 rounded-2xl bg-[var(--gs-ink)] flex items-center justify-center text-white shrink-0" aria-hidden>
+              <Smartphone size={26} />
+            </span>
+            <div>
+              <p className="text-[0.7rem] tracking-[0.22em] uppercase text-[var(--gs-brand)] font-bold">Install the app</p>
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[var(--gs-ink)] text-balance">
+                Take GreenHQ to the field.
+              </h2>
+            </div>
+          </div>
+          <p className="text-[var(--gs-muted)] mt-4 max-w-2xl leading-relaxed">
+            GreenHQ is a PWA, so it installs straight from the browser with no app store.
+            It opens full-screen from your home screen and keeps working offline.
+          </p>
+          <ol className="grid gap-4 md:grid-cols-3 mt-6 list-none pl-0">
+            {INSTALL_STEPS.map((s) => (
+              <li key={s.n} className="rounded-2xl p-5 bg-[var(--gs-bg)]">
+                <p className="font-mono font-bold text-sm text-[var(--gs-coral)]">{s.n}</p>
+                <h3 className="font-bold text-[var(--gs-ink)] mt-2">{s.title}</h3>
+                <p className="text-sm text-[var(--gs-muted)] mt-1.5 leading-relaxed">{s.body}</p>
+              </li>
+            ))}
+          </ol>
+          <p className="text-xs text-[var(--gs-muted)] mt-4">
+            On iPhone, open the site in Safari and use Share, then Add to Home Screen.
+          </p>
         </div>
       </section>
 
