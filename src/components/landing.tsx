@@ -36,6 +36,11 @@ const FEATURES = [
     body: "Scans and status updates queue on the device in zero-connectivity zones and sync when you're back.",
   },
   {
+    icon: Smartphone,
+    title: "Mobile-first for the field",
+    body: "Designed phone-first with big touch targets and fast loads on low-end devices. Installs as an app, no app store needed.",
+  },
+  {
     icon: Gift,
     title: "Gift trees that outlive cards",
     body: "Dedicate a real, trackable tree with a shareable certificate and QR. Recipients watch it grow for years.",
