@@ -11,6 +11,13 @@ frontend:
         - bun install --frozen-lockfile
     build:
       commands:
+        # Amplify console env vars are present at build time but NOT passed to
+        # the Next.js server runtime by default. Persist the server-side vars
+        # into .env.production before `next build` so the SSR compute + API
+        # routes can read them at request time. See AWS docs "Making
+        # environment variables accessible to server-side runtimes".
+        # (`|| true` keeps the build green when an optional var is unset.)
+        - env | grep -e DATABASE_URL -e AUTH_SECRET -e NEON_AUTH -e RESEND_API_KEY -e EMAIL_FROM -e VAPID -e NEXT_PUBLIC_ >> .env.production || true
         - bun run build
   artifacts:
     baseDirectory: .next

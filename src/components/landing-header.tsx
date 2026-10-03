@@ -23,19 +23,22 @@ export function LandingHeader() {
             <a key={l.href} href={l.href} className="hover:text-[var(--gs-ink)]">{l.label}</a>
           ))}
         </nav>
-        <div className="ml-auto flex items-center gap-1.5">
+        <div className="ml-auto flex items-start gap-1.5">
           <Link
             href="/signup"
             className="hidden sm:inline-flex items-center text-sm font-semibold text-[var(--gs-ink)] px-3 py-2.5"
           >
             Sign up
           </Link>
-          <Link
-            href="/login"
-            className="gs-chip !bg-[var(--gs-ink)] !text-white !px-5 !py-2.5 inline-flex items-center gap-1.5"
-          >
-            Sign in <ArrowRight size={14} aria-hidden />
-          </Link>
+          <div className="flex flex-col items-center">
+            <Link
+              href="/login"
+              className="gs-chip !bg-[var(--gs-ink)] !text-white !px-5 !py-2.5 inline-flex items-center gap-1.5"
+            >
+              Sign in <ArrowRight size={14} aria-hidden />
+            </Link>
+            <span className="text-[11px] leading-none mt-1 whitespace-nowrap text-[var(--gs-muted)]">Demo credentials inside</span>
+          </div>
         </div>
         <button
           type="button"
