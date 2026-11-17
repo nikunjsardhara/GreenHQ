@@ -1,12 +1,5 @@
 # GreenHQ
 
-Submission for the **Zero to Shipped** hackathon by AWS Builder Center.
-
-- **Category:** Social good, Climate resilience `#social-good` `#climate-resilience`
-- **Lane:** Community `#community`
-
-## What it is
-
 GreenHQ helps NGOs plan, execute, and prove tree plantation drives. Each sapling gets a QR code identity: volunteers scan it in the field (even with no internet) to record GPS, photos, and growth stages, and anyone can gift a real, trackable tree with a shareable certificate. Dashboards show survival rates and CO2 impact, so donors and communities can verify every claim.
 
 One deployment serves many NGOs, each with its own projects, team roles (admin, coordinator, field volunteer, viewer), and branding.
